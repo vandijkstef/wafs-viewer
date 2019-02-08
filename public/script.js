@@ -15,12 +15,12 @@
 	function processData(data, target) {
 		data.forEach((studentData) => {
 			minor.addStudent(new Student(studentData));
-			// student.Render(target);
+			// student.RenderUpdate(target);
 			// console.log(student);
 		});
 		minor.getStudentsBy('level', false).forEach((student) => {
-			student.Render(target);
-		})
+			student.RenderUpdate(target);
+		});
 	}
 	
 	class Minor {
@@ -57,7 +57,7 @@
 	
 		constructor(data) {
 			// TODO: I should fix the headers in parsing, the module seems to provide a way to do this, but is acting up
-	
+			this.DOM = {};
 			this.name = data['Student'];
 			this.level = data['Niveau'];
 			this.repo = data['Repo'];
@@ -75,28 +75,34 @@
 			if (data['Clean global']) this.noglobe = true;
 		}
 	
-		Render(target) {
-			const wrapper = document.createElement('div');
-			wrapper.dataset.level = this.level;
-	
-			if (this.apiStyle === undefined) {
-				wrapper.classList.add('error');
-			} else {
-				if (this.apiStyle) wrapper.classList.add('confirm');
+		RenderUpdate(target) {
+			// Create wrapper if needed
+			if (!this.DOM.wrapper) {
+				this.DOM.wrapper = document.createElement('div');
+				this.DOM.wrapper.dataset.level = this.level;
+				target.appendChild(this.DOM.wrapper);
 			}
-			
-			if (this.writer) wrapper.classList.add('writer');
-			if (this.async) wrapper.classList.add('async');
-			if (this.templator) wrapper.classList.add('templator');
-			if (this.modular) wrapper.classList.add('modular');
-			if (this.noglobe) wrapper.classList.add('noglobe');
-
-			const name = document.createElement('a');
-			name.innerText = this.name;
-			name.href = this.repo;
-			wrapper.appendChild(name);
 	
-			target.appendChild(wrapper);
+			// Decorate the wrapper
+			if (this.apiStyle === undefined) {
+				this.DOM.wrapper.classList.add('error');
+			} else {
+				if (this.apiStyle) this.DOM.wrapper.classList.add('confirm');
+			}
+			(this.writer) ? this.DOM.wrapper.classList.add('writer') : this.DOM.wrapper.classList.remove('writer');
+			(this.async) ? this.DOM.wrapper.classList.add('async'): this.DOM.wrapper.classList.remove('async');
+			(this.templator) ? this.DOM.wrapper.classList.add('templator'): this.DOM.wrapper.classList.remove('templator');
+			(this.modular) ? this.DOM.wrapper.classList.add('modular'): this.DOM.wrapper.classList.remove('modular');
+			(this.noglobe) ? this.DOM.wrapper.classList.add('noglobe'): this.DOM.wrapper.classList.remove('noglobe');
+
+			// Create name if needed
+			if (!this.DOM.name) {
+				this.DOM.name = document.createElement('a');
+				this.DOM.wrapper.appendChild(this.DOM.name);
+			}
+			this.DOM.name.innerText = this.name;
+			this.DOM.name.href = this.repo;
+		
 		}
 
 	}
