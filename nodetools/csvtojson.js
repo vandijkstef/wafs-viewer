@@ -2,7 +2,7 @@ const csv = require('csv-parser');
 const fs = require('fs');
 
 const dataDir = 'data';
-const inFile = 'fdbk';
+const inFile = 'feedin';
 const outFile = 'feedback';
 
 const studentResults = [];
@@ -13,5 +13,5 @@ fs.createReadStream(`./${dataDir}/${inFile}.csv`)
 		studentResults.push(student);
 	})
 	.on('end', () => {
-		fs.writeFileSync(`./${dataDir}/${outFile}.json`, JSON.stringify(studentResults));
+		fs.writeFileSync(`./public/${outFile}.json`, JSON.stringify(studentResults));
 	});
