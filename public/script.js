@@ -15,8 +15,6 @@
 	function processData(data, target) {
 		data.forEach((studentData) => {
 			minor.addStudent(new Student(studentData));
-			// student.RenderUpdate(target);
-			// console.log(student);
 		});
 		minor.getStudentsBy('level', false).forEach((student) => {
 			student.RenderUpdate(target);
