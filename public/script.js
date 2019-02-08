@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	const wrapper = document.createElement('div');
 	console.log(minor);
-	fetch('/data/feedback.json')
+	fetch('/feedback.json')
 		.then((res) => {
 			return res.json();
 		})
@@ -80,12 +80,10 @@ class Student {
 			if (this.apiStyle) wrapper.classList.add('confirm');
 		}
 
-		const name = document.createElement('p');
+		const name = document.createElement('a');
 		name.innerText = this.name;
+		name.href = this.repo;
 		wrapper.appendChild(name);
-
-		
-
 
 		target.appendChild(wrapper);
 
