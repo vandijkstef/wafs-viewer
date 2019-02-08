@@ -7,10 +7,24 @@
 				return res.json();
 			})
 			.then((data) => {
+				createFilterButtons();
 				processData(data, wrapper);
 				document.body.appendChild(wrapper);
 			})
 	});
+
+	function createFilterButtons() {
+		const filterWrap = document.createElement('div');
+		const sortButton = document.createElement('button');
+		
+		const writerButton = sortButton.cloneNode();
+		writerButton.addEventListener('click', handleSortButton); // Sadly enough, this isn't cloned
+		writerButton.innerText = 'Writer'
+		writerButton.dataset.sort = writerButton.innerText.toLowerCase();
+		filterWrap.appendChild(writerButton);
+
+		document.body.appendChild(filterWrap);
+	}
 	
 	function processData(data, target) {
 		data.forEach((studentData) => {
@@ -19,6 +33,16 @@
 		minor.getStudentsBy('level', false).forEach((student) => {
 			student.RenderUpdate(target);
 		});
+	}
+
+	function handleSortButton() {
+		const overview = this.parentElement.nextSibling;
+		if (overview.dataset.sort === this.dataset.sort) {
+			overview.classList.toggle('asc')
+		} else {
+			overview.classList.remove('asc');
+			this.parentElement.nextSibling.dataset.sort = this.dataset.sort;
+		}
 	}
 	
 	class Minor {
@@ -66,11 +90,12 @@
 				(data['XML HTTP']) ? this.apiStyle = false : this.apiStyle = true;
 			}
 
-			if (data['README']) this.writer = true;
-			if (data['Async/Await']) this.async = true;
-			if (data['Templ. Engine']) this.templator = true;
-			if (data['Modules']) this.modular = true;
-			if (data['Clean global']) this.noglobe = true;
+			// if (data['README']) this.writer = true;
+			this.writer = (data['README']);
+			this.async = (data['Async/Await']);
+			this.templator = (data['Templ. Engine']);
+			this.modular = (data['Modules']);
+			this.noglobal = (data['Clean global']);
 		}
 	
 		RenderUpdate(target) {
@@ -91,7 +116,7 @@
 			(this.async) ? this.DOM.wrapper.classList.add('async'): this.DOM.wrapper.classList.remove('async');
 			(this.templator) ? this.DOM.wrapper.classList.add('templator'): this.DOM.wrapper.classList.remove('templator');
 			(this.modular) ? this.DOM.wrapper.classList.add('modular'): this.DOM.wrapper.classList.remove('modular');
-			(this.noglobe) ? this.DOM.wrapper.classList.add('noglobe'): this.DOM.wrapper.classList.remove('noglobe');
+			(this.noglobal) ? this.DOM.wrapper.classList.add('noglobal'): this.DOM.wrapper.classList.remove('noglobal');
 
 			// Create name if needed
 			if (!this.DOM.name) {
@@ -104,4 +129,5 @@
 		}
 
 	}
+
 })();

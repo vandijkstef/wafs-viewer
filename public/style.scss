@@ -19,3 +19,16 @@ a {
 .writer {
 	font-family: sans-serif;
 }
+
+body > div {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(20em, 1fr) );
+	&[data-sort=confirm] .confirm, &[data-sort=writer] .writer, &[data-sort=modular] .modular, &[data-sort=async] .async {
+		order: -1;
+	}
+	&.asc {
+		&[data-sort=confirm] .confirm, &[data-sort=writer] .writer, &[data-sort=modular] .modular, &[data-sort=async] .async {
+			order: 1;
+		}
+	}
+}
