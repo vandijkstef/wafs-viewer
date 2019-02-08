@@ -18,7 +18,7 @@
 			// student.Render(target);
 			// console.log(student);
 		});
-		minor.getStudentsBy('level', true).forEach((student) => {
+		minor.getStudentsBy('level', false).forEach((student) => {
 			student.Render(target);
 		})
 	}
@@ -69,6 +69,10 @@
 			}
 
 			if (data['README']) this.writer = true;
+			if (data['Async/Await']) this.async = true;
+			if (data['Templ. Engine']) this.templator = true;
+			if (data['Modules']) this.modular = true;
+			if (data['Clean global']) this.noglobe = true;
 		}
 	
 		Render(target) {
@@ -82,6 +86,10 @@
 			}
 			
 			if (this.writer) wrapper.classList.add('writer');
+			if (this.async) wrapper.classList.add('async');
+			if (this.templator) wrapper.classList.add('templator');
+			if (this.modular) wrapper.classList.add('modular');
+			if (this.noglobe) wrapper.classList.add('noglobe');
 
 			const name = document.createElement('a');
 			name.innerText = this.name;
