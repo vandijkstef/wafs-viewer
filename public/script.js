@@ -7,7 +7,7 @@
 				return res.json();
 			})
 			.then((data) => {
-				createFilterButtons();
+				// createFilterButtons();
 				processData(data, wrapper);
 				document.body.appendChild(wrapper);
 			})
@@ -28,10 +28,10 @@
 	
 	function processData(data, target) {
 		data.forEach((studentData) => {
-			minor.addStudent(new Student(studentData));
+			minor.addStudent(new Student(studentData, target));
 		});
-		minor.getStudentsBy('level', false).forEach((student) => {
-			student.RenderUpdate(target);
+		minor.getStudents(false).forEach((student) => {
+			student.RenderUpdate();
 		});
 	}
 
@@ -74,13 +74,54 @@
 	// Singleton pattern https://www.sitepoint.com/javascript-design-patterns-singleton/
 	const minor = new Minor();
 	Object.freeze(minor);
+
+	class DOM {
+		constructor(target) {
+			this.DOM = {
+				target: target
+			};
+		}
+
+		UpdateDOM(content, element) {
+			if (element.innerText !== content) {
+				element.innerText = content;
+			}
+		}
+
+		UpdateDOMKey(key, DOM) {
+			if (!DOM[key]) {
+				console.warn(`Cannot update non-existant DOM: ${key}`);
+				return;
+			}
+			if (!this[key]) {
+				console.warn(`Key '${key}' does not exsist`)
+				return;
+			} else if (typeof(this[key]) !== 'string' && typeof(this[key]) !== 'number') {
+				console.warn(`Key '${key}' not valid`, typeof(key));
+				return;
+			}
+			if (DOM[key].innerText !== this[key]) {
+				DOM[key].innerText = this[key];
+			}
+		}
+	}
+
+	class Person extends DOM {
+		constructor(data, target) {
+			super(target);
+			this.blob = data;
+			
+			this.name = data.name;
+		}
+	}
 	
-	class Student {
+	class Student extends Person {
 	
-		constructor(data) {
+		constructor(data, target) {
+			data.name = data['Student'];
+			super(data, target);
+
 			// TODO: I should fix the headers in parsing, the module seems to provide a way to do this, but is acting up
-			this.DOM = {};
-			this.name = data['Student'];
 			this.level = data['Niveau'];
 			this.repo = data['Repo'];
 	
@@ -90,7 +131,7 @@
 				(data['XML HTTP']) ? this.apiStyle = false : this.apiStyle = true;
 			}
 
-			// if (data['README']) this.writer = true;
+			// () Parses the variables as being truthy or falsey and returns a boolean
 			this.writer = (data['README']);
 			this.async = (data['Async/Await']);
 			this.templator = (data['Templ. Engine']);
@@ -98,12 +139,12 @@
 			this.noglobal = (data['Clean global']);
 		}
 	
-		RenderUpdate(target) {
+		RenderUpdate() {
 			// Create wrapper if needed
 			if (!this.DOM.wrapper) {
 				this.DOM.wrapper = document.createElement('div');
 				this.DOM.wrapper.dataset.level = this.level;
-				target.appendChild(this.DOM.wrapper);
+				this.DOM.target.appendChild(this.DOM.wrapper);
 			}
 	
 			// Decorate the wrapper
@@ -123,7 +164,7 @@
 				this.DOM.name = document.createElement('a');
 				this.DOM.wrapper.appendChild(this.DOM.name);
 			}
-			this.DOM.name.innerText = this.name;
+			this.UpdateDOM(this.name, this.DOM.name);
 			this.DOM.name.href = this.repo;
 		
 		}
