@@ -9,6 +9,9 @@
 			.then((data) => {
 				// createFilterButtons();
 				processData(data, wrapper);
+				minor.getStudents().forEach((student) => {
+					student.RenderUpdate();
+				});
 				document.body.appendChild(wrapper);
 			})
 	});
@@ -29,9 +32,6 @@
 	function processData(data, target) {
 		data.forEach((studentData) => {
 			minor.addStudent(new Student(studentData, target));
-		});
-		minor.getStudents(false).forEach((student) => {
-			student.RenderUpdate();
 		});
 	}
 
@@ -88,22 +88,22 @@
 			}
 		}
 
-		UpdateDOMKey(key, DOM) {
-			if (!DOM[key]) {
-				console.warn(`Cannot update non-existant DOM: ${key}`);
-				return;
-			}
-			if (!this[key]) {
-				console.warn(`Key '${key}' does not exsist`)
-				return;
-			} else if (typeof(this[key]) !== 'string' && typeof(this[key]) !== 'number') {
-				console.warn(`Key '${key}' not valid`, typeof(key));
-				return;
-			}
-			if (DOM[key].innerText !== this[key]) {
-				DOM[key].innerText = this[key];
-			}
-		}
+		// UpdateDOMKey(key, DOM) {
+		// 	if (!DOM[key]) {
+		// 		console.warn(`Cannot update non-existant DOM: ${key}`);
+		// 		return;
+		// 	}
+		// 	if (!this[key]) {
+		// 		console.warn(`Key '${key}' does not exsist`)
+		// 		return;
+		// 	} else if (typeof(this[key]) !== 'string' && typeof(this[key]) !== 'number') {
+		// 		console.warn(`Key '${key}' not valid`, typeof(key));
+		// 		return;
+		// 	}
+		// 	if (DOM[key].innerText !== this[key]) {
+		// 		DOM[key].innerText = this[key];
+		// 	}
+		// }
 	}
 
 	class Person extends DOM {
