@@ -4,12 +4,13 @@
   "description": "Viewing Students progress",
   "main": "index.js",
   "scripts": {
-	"test": "echo \"Error: no test specified\" && exit 1",
-	"parse-csv": "node nodetools/csvtojson.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "parse-csv": "node nodetools/csvtojson.js"
   },
   "author": "Stef van Dijk",
   "license": "copyleft",
   "dependencies": {
-    "csv-parser": "^2.1.0"
+    "csv-parser": "^2.1.0",
+    "handlebars": "^4.1.0"
   }
 }
